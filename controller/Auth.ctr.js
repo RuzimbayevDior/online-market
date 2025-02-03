@@ -1,19 +1,18 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
-const authSchema = require("../schema/auth.schema");
+const authSchema = require("../schema/user.schema");
 require("dotenv").config();
 const {
   generatAccessToken,
   generateRefreshToken,
 } = require("../utils/generate");
 const BaseError = require("../utils/error");
-const carSchema = require("../schema/car.schema");
-const carsModelSchema = require("../schema/carsModel.schema");
+
 
 const register = async (req, res, next) => {
   try {
-    const { email, password, username } = req.body;
+    const { email, password, username , gender }= req.body;
     const foundUser = await authSchema.findOne({ email });
 
     if (foundUser) {
@@ -28,7 +27,7 @@ const register = async (req, res, next) => {
       },
     });
 
-    const generateCode = await Array.from({ length: 6 }, () =>
+    const generateCode = await Array.from({ length: 4 }, () =>
       Math.floor(Math.random() * 10)
     ).join("");
 
@@ -56,6 +55,7 @@ const register = async (req, res, next) => {
     const findUser = await authSchema.create({
       username,
       email,
+      gender,
       password: hash,
       verify_code: generateCode,
     });
@@ -105,7 +105,7 @@ const login = async (req, res, next) => {
     const findUser = await authSchema.findOne({ email });
 
     if (!findUser) {
-      throw BaseError.BadRequest("User not found");
+      throw BaseError.BadRequest("Bunday foydalanuvchi mavjud emas!");
     }
 
     const checkerPassword = await bcrypt.compare(password, findUser.password);
@@ -142,7 +142,7 @@ const login = async (req, res, next) => {
         },
       });
     } else {
-      throw BaseError.BadRequest("You were not verified ");
+      throw BaseError.BadRequest("Siz verificatsiyadan o`tmagansiz");
     }
   } catch (error) {
     next(error);
@@ -162,32 +162,16 @@ const logout = (req, res) => {
   }
 };
 
-const getAuth = async (req, res, next) => {
+const profil = async (req, res, next) => {
   try {
-    const email = req.body.email;
-    const user = await authSchema.findOne({ email: email });
+    const { id } = req.body;
+    const user = await authSchema.findOne({ _id: id });
 
     if (!user) {
-      throw BaseError.BadRequest("user not found");
+      throw BaseError.BadRequest("Bunday foydalanuvchi mavjud emas!");
     }
-    if (user.role == "admin") {
-      const cars = await carSchema.find({ adminID: user._id });
-      const models = await carsModelSchema.find({ adminID: user._id });
+    res.json({user})
 
-      return res.json({
-        message: "success",
-        id: user._id,
-        email: user.email,
-        role: user.role,
-        cars: cars,
-        models: models,
-      });
-    }
-    res.json({
-      message: "success",
-      email: user.email,
-      role: user.role,
-    });
   } catch (error) {
     next(error);
   }
@@ -198,5 +182,5 @@ module.exports = {
   verify,
   login,
   logout,
-  getAuth,
+  profil,
 };

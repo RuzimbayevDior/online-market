@@ -23,8 +23,17 @@ const UserSchema = new Schema(
         message: "{VALUE} - this is not found",
       },
     },
+    gender: {
+      type: String,
+      required: true,
+      enum: {
+        values: ["male", "female"],
+        message: "{VALUE} - this is not found",
+      },
+    },
     premium: {
       type: String,
+      default: "free",
       enum:{
         values: ["free","1_oylik", "3_oylik", "6_oylik", "12_oylik"],
         message: "{VALUE} - this is not found",

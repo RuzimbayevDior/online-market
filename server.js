@@ -2,7 +2,7 @@ const express = require("express")
 const { connectDB } = require("./db/config")
 require("dotenv").config()
 const cors = require("cors")    
-
+const AuthRouter = require("./router/Auth.routes")
 
 const cookieParser = require("cookie-parser")
 const swaggerUi = require('swagger-ui-express')
@@ -18,7 +18,7 @@ app.use(cookieParser())
 app.use('/documantation', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 ///////////// router
-
+app.use(AuthRouter())
 
 connectDB()
 
