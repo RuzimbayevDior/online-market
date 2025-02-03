@@ -2,17 +2,16 @@ const { Schema, model } = require("mongoose");
 
 const UserSchema = new Schema(
   {
-    name: {
+    username: {
       type: String,
+      required: true,
     },
-    last_name: {
-        type: String,
-      },
+
     password: {
       type: String,
       required: true,
     },
-    phone: {
+    email: {
       type: String,
       required: true,
     },
@@ -20,9 +19,16 @@ const UserSchema = new Schema(
       type: String,
       default: "user",
       enum: {
-        values: ["user", "admin", "superadmin"],
+        values: ["user","premium_user", "admin", "superadmin"],
         message: "{VALUE} - this is not found",
       },
+    },
+    premium: {
+      type: String,
+      enum:{
+        values: ["free","1_oylik", "3_oylik", "6_oylik", "12_oylik"],
+        message: "{VALUE} - this is not found",
+      }
     },
     verify: {
       type: Boolean,
