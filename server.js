@@ -4,7 +4,7 @@ require("dotenv").config()
 const cors = require("cors")    
 const AuthRouter = require("./router/Auth.routes")
 const AnimeRouter = require("./router/admin.routes")
-
+const superAdminRouter = require("./router/superAdmin.routes")
 const cookieParser = require("cookie-parser")
 const swaggerUi = require('swagger-ui-express')
 const swaggerDocs = require("./utils/swagger")
@@ -19,8 +19,13 @@ app.use(cookieParser())
 app.use('/documantation', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 ///////////// router
-app.use(AuthRouter())
-app.use(AnimeRouter())
+app.use(AuthRouter)
+app.use(AnimeRouter)
+app.use(superAdminRouter)
+
+
+
+
 connectDB()
 
 

@@ -8,13 +8,13 @@ const {
 } = require("../controller/Auth.ctr");
 
 
-const authRouter = Router();
+const AuthRouter = Router();
 
-authRouter.post("/register", register);
-authRouter.post("/verify", verify);
-authRouter.post("/login", login);
+AuthRouter.post("/register", register);
+AuthRouter.post("/verify", verify);
+AuthRouter.post("/login", login);
 // authRouter.post("/refresh");
-authRouter.post("/logout", logout);
-authRouter.get("/getAuth", profil);
+AuthRouter.post("/logout", logout);
+AuthRouter.get("/getAuth", profil);
 
-module.exports = authRouter;
+module.exports = AuthRouter;
