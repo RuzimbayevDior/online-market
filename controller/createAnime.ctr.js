@@ -20,13 +20,13 @@ const addAnime = async (req, res, next) => {
         country,
       } = req.body;
 
-      const model = await carModelSchema.findOne({ _id: marka });
+      const model = await AnimeSchema.findOne({ _id: marka });
 
       if (!model) {
         throw BaseError.BadRequest("Model mavjud emas!");
       }
 
-      await carSchema.create({
+      await AnimeSchema.create({
         data,
         name,
         desc,

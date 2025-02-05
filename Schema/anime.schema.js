@@ -63,4 +63,4 @@ const AnimeSchema = new Schema(
   }
 );
 
-module.exports = model("users", UserSchema);
+module.exports = model("users", AnimeSchema);
