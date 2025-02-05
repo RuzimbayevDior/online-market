@@ -44,15 +44,15 @@ const AnimeSchema = new Schema(
    },
    trailer : {
     type : String,
-    required : true,
+    default : null
    },
    bannerImg : {
     type : String,
-    required : true,
+    default : null
    },
    animeFotoImg : {
     type : String,
-    required : true,
+    default : null
    }
 
 
