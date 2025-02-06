@@ -26,15 +26,24 @@ const addAnime = async (req, res, next) => {
         part,
         category,
         country,
-
+        // bannerImg
       } = req.body;
 
 
-
+   
+     
+      if (!req.files || !req.files.bannerImg || !req.files.animeFotoImg || !req.files.trailer) {
+        throw BaseError.BadRequest("Missing required files (bannerImg, animeFotoImg, trailer)");
+      }
+      // console.log(req.files.bannerImg[0]);
       
-    const  bannerImg = req.files.bannerImg[0].originalname
-    const  animeFotoImg = req.files.animeFotoImg[0].originalname
-    const  trailer = req.files.trailer[0].originalname
+      const bannerImg = req.files.bannerImg[0].filename ;
+      const animeFotoImg =  req.files.animeFotoImg[0].filename;
+      const trailer =  req.files.trailer[0].filename ;
+      
+      // Faylning mavjudligini tekshirish
+   
+  
 
       const anime = await AnimeSchema.create({
         data,
@@ -66,4 +75,13 @@ const addAnime = async (req, res, next) => {
 
 
 
-module.exports = addAnime ;
+
+
+
+
+
+
+
+
+
+module.exports =addAnime  ;
