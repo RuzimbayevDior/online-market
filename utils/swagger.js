@@ -1,11 +1,11 @@
 const swaggerJsdoc = require('swagger-jsdoc')
 
-
+// Swagger konfiguratsiyasi
 const swaggerOptions = {
-  swaggerDefinition: {
+  definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Book API',
+      title: 'Anilive API',
       version: '1.0.0',
       description: 'Authentication system with login, register, and logout features.',
     },
@@ -24,7 +24,7 @@ const swaggerOptions = {
       },
     },
   },
-  apis: ['./router/*.js'], 
+  apis: ['./router/*.js'], // Routerlar joylashgan joy
 };
 
 const swaggerDocs = swaggerJsdoc(swaggerOptions);

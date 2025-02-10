@@ -1,67 +1,47 @@
 const AnimeSchema = require("../Schema/anime.schema");
 const jwt = require("jsonwebtoken");
 const BaseError = require("../utils/error");
-require('dotenv').config();
-const path = require('path')
+require("dotenv").config();
+const path = require("path");
 
 const addAnime = async (req, res, next) => {
   try {
     const accessToken = req.cookies["accesstoken"];
 
     if (!accessToken) {
-      throw BaseError.BadRequest("Access token not found")
+      throw BaseError.BadRequest("Access token not found");
     }
     const decoded = jwt.verify(accessToken, process.env.SECRET_ACCESS_KEY);
 
-    
-
     if (decoded.role == "admin" || decoded.role == "superadmin") {
-      const {
-        data,
+      const { name, data, director, eye, country, desc, category } = req.body;
+      const banner = req.files["banner"] ? req.files["banner"][0].path : null;
+      const animeImage = req.files["animeImage"]
+        ? req.files["animeImage"][0].path
+        : null;
+      const trailer = req.files["trailer"]
+        ? req.files["trailer"][0].path
+        : null;
+
+
+        const serverUrl = `${req.protocol}://${req.get('host')}/`;
+
+
+      const newAnime = AnimeSchema({
         name,
-        desc,
-        genre,
+        data,
         eye,
         director,
-        part,
-        category,
         country,
-        // bannerImg
-      } = req.body;
-
-
-   
-     
-      if (!req.files || !req.files.bannerImg || !req.files.animeFotoImg || !req.files.trailer) {
-        throw BaseError.BadRequest("Missing required files (bannerImg, animeFotoImg, trailer)");
-      }
-      // console.log(req.files.bannerImg[0]);
-      
-      const bannerImg = req.files.bannerImg[0].filename ;
-      const animeFotoImg =  req.files.animeFotoImg[0].filename;
-      const trailer =  req.files.trailer[0].filename ;
-      
-      // Faylning mavjudligini tekshirish
-   
-  
-
-      const anime = await AnimeSchema.create({
-        data,
-        name,
         desc,
-        genre,
-        eye,
-        director,
-        part,
+        banner: serverUrl + banner.replace(/\\/g, "/"),
         category,
-        country,
-        bannerImg,
-        animeFotoImg,
-        trailer
+        animeImage : serverUrl + animeImage.replace(/\\/g, "/"),
+        trailer : serverUrl + trailer.replace(/\\/g, "/"),
       });
-      return res.json({
-        message: "Added Anime",
-      });
+      await newAnime.save();
+
+      res.json({ message: "Anime muvaffaqiyatli yuklandi!", data: newAnime });
     } else {
       throw BaseError.BadRequest("You were not admin");
     }
@@ -70,18 +50,15 @@ const addAnime = async (req, res, next) => {
   }
 };
 
+const getAnime = async (req, res) => {
+  try {
+    const animes = await AnimeSchema.find();
+    res.json(animes);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Ma’lumotlarni olishda xatolik", details: error.message });
+  }
+};
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-module.exports =addAnime  ;
+module.exports = { addAnime, getAnime };

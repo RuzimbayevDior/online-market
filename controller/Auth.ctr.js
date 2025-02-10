@@ -19,13 +19,13 @@ const register = async (req, res, next) => {
       throw BaseError.BadRequest("Bu foydalanuvchi avval ro`yxatdan o`tgan");
     }
 
-    // const transporter = await nodemailer.createTransport({
-    //   service: "gmail",
-    //   auth: {
-    //     user: process.env.GMAIL,
-    //     pass: process.env.PASSKEY,
-    //   },
-    // });
+    const transporter = await nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.GMAIL,
+        pass: process.env.PASSKEY,
+      },
+    });
 
     const generateCode = await Array.from({ length: 4 }, () =>
       Math.floor(Math.random() * 10)
@@ -38,17 +38,17 @@ const register = async (req, res, next) => {
       html: `<p>${generateCode}</p>`,
     };
 
-    // await transporter.sendMail(send, (error, info) => {
-    //   if (error) {
-    //     return res.json({
-    //       message: error.message,
-    //     });
-    //   } else {
-    //     return res.json({
-    //       message: info.response,
-    //     });
-    //   }
-    // });
+    await transporter.sendMail(send, (error, info) => {
+      if (error) {
+        return res.json({
+          message: error.message,
+        });
+      } else {
+        return res.json({
+          message: info.response,
+        });
+      }
+    });
 
     const hash = await bcrypt.hash(password, 12);
 

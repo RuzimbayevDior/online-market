@@ -3,7 +3,7 @@ const { Schema, model } = require("mongoose");
 const AnimeSchema = new Schema(
   {
    data : {
-    type : String,
+    type : Number,
     required : true,
    },
    name : {
@@ -14,20 +14,12 @@ const AnimeSchema = new Schema(
     type : String,
     required : true,
    },
-   genre : {
-    type : String,
-    required : true,
-   },
    eye : {
     type : Number,
     required : true,
    },
    director : {
     type : String,
-    required : true,
-   },
-   part : {
-    type : Number,
     required : true,
    },
    category : {
@@ -43,16 +35,13 @@ const AnimeSchema = new Schema(
     required : true,
    },
    trailer : {
-    type : String,
-    default : null
+    type : String
    },
-   bannerImg : {
-    type : String,
-    default : null
+   banner : {
+    type : String
    },
-   animeFotoImg : {
-    type : String,
-    default : null
+   animeImage : {
+    type : String
    }
 
 
