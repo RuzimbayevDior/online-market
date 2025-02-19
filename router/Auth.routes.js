@@ -43,6 +43,7 @@ const {
   login,
   logout,
   profil,
+  re_verifyCode
 } = require("../controller/Auth.ctr");
 
 
@@ -320,5 +321,55 @@ AuthRouter.post("/logout", logout);
 
 
 AuthRouter.get("/profil", profil);
+
+
+
+
+
+/** @swagger 
+* /re_verify:
+*   post:
+*     summary: Verify a user's email
+*     description: Verifies a user's email using a verification code.
+*     tags:
+*       - Auth
+*     requestBody:
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             required:
+*               - email
+*             properties:
+*               email:
+*                 type: string
+*                 format: email
+*                 example: "user@gmail.com"
+*     responses:
+*       "200":
+*         description: verify code has been sent successfully
+*         content:
+*           application/json:
+*             schema:
+*               type: object
+*               properties:
+*                 message:
+*                   type: string
+*                   example: Successfully
+*       "500":
+*         description: Internal server error
+*         content:
+*           application/json:
+*             schema:
+*               type: object
+*               properties:
+*                 message:
+*                   type: string
+*                   example: Internal Server Error
+*/
+
+
+AuthRouter.post("/re_verify", re_verifyCode);
 
 module.exports = AuthRouter;

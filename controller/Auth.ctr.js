@@ -71,6 +71,57 @@ const register = async (req, res, next) => {
   }
 };
 
+
+
+const re_verifyCode = async(req, res, next) => {
+  const email = req.body.email
+  const transporter = await nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.GMAIL,
+      pass: process.env.PASSKEY,
+    },
+  });
+
+
+  const generateCode = await Array.from({ length: 4 }, () =>
+    Math.floor(Math.random() * 10)
+  ).join("");
+
+  const send = {
+    from: process.env.GMAIL,
+    to: email,
+    subject: "test",
+    html: `<p>${generateCode}</p>`,
+  };
+
+  const findUser = await authSchema.findOne({ email });
+
+  if (!findUser) {
+    throw BaseError.BadRequest("User not found");
+  }
+
+  if (findUser.verify_code == "") {
+    await authSchema.findByIdAndUpdate(findUser._id, {
+      verify_code: generateCode ,
+    });
+
+
+  await transporter.sendMail(send, (error, info) => {
+    if (error) {
+      return res.json({
+        message: error.message,
+      });
+    } else {
+      return res.json({
+        message: "verify code has been sent successfully",
+      });
+    }
+  });
+}
+}
+
+
 const verify = async (req, res, next) => {
   try {
     const { email, verify_code } = req.body;
@@ -81,7 +132,7 @@ const verify = async (req, res, next) => {
       throw BaseError.BadRequest("User not found");
     }
 
-    if (findUser.verify_code === verify_code) {
+    if (findUser.verify_code == verify_code) {
       await authSchema.findByIdAndUpdate(findUser._id, {
         verify: true,
         verify_code: "",
@@ -179,6 +230,7 @@ const profil = async (req, res, next) => {
 
 module.exports = {
   register,
+  re_verifyCode,
   verify,
   login,
   logout,

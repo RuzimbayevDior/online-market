@@ -5,9 +5,11 @@ const cors = require("cors")
 const AuthRouter = require("./router/Auth.routes")
 const AnimeRouter = require("./router/admin.routes")
 const superAdminRouter = require("./router/superAdmin.routes")
+const ShortRouter = require("./router/short.routes")
 const cookieParser = require("cookie-parser")
 const swaggerUi = require('swagger-ui-express')
 const swaggerDocs = require("./utils/swagger")
+const LCSRouter = require("./router/LCS.routes")
 
 
 const app = express()
@@ -22,7 +24,7 @@ app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use(AuthRouter)
 app.use(AnimeRouter)
 app.use(superAdminRouter)
-
+app.use(ShortRouter)
 
 
 
