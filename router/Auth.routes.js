@@ -286,7 +286,7 @@ AuthRouter.post("/logout", logout);
 /**
  * @swagger
  * /profil:
- *   post:
+ *   get:
  *     summary: Foydalanuvchi profilini olish
  *     description: Berilgan foydalanuvchi ID bo'yicha profilni qaytaradi.
  *     tags:
