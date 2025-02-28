@@ -44,11 +44,9 @@ const addShort = async (req, res, next) => {
 const getShorts = async (req, res, next) => {
   try {
     const shorts = await ShortSchema.find();
-    res.json(shorts);
+    res.status(200).json(shorts);
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Ma’lumotlarni olishda xatolik", details: error.message });
+    res.status(500).json({ error: "Ma’lumotlarni olishda xatolik", details: error.message });
   }
 };
 

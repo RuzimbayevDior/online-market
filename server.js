@@ -18,7 +18,7 @@ app.use(cors())
 app.use(cookieParser())
 
 
-app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use('/ui', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 ///////////// router
 app.use(AuthRouter)
